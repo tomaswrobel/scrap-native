@@ -12,10 +12,10 @@ import "./scss/*.scss";
 import {App} from "@scrap/app";
 
 window.MonacoEnvironment = {
-	getWorker: () =>
-		new Worker(new URL("./monaco-editor/ts.worker.ts", import.meta.url), {
-			type: "module",
-		}),
+	getWorker: () => new Worker(
+		new URL("./monaco-editor/ts.worker.ts", import.meta.url), 
+		{type: "module"}
+	),
 };
 
 window.app = new App();

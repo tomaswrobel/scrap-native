@@ -9,8 +9,8 @@ use swc_core::{
     },
 };
 
-use swc::{config::IsModule, Compiler, PrintArgs};
 use crate::visitor::javascript;
+use swc::{config::IsModule, Compiler, PrintArgs};
 pub type Parsed = Module;
 
 pub fn get_type(t: &TsType) -> Vec<String> {
@@ -124,17 +124,17 @@ pub fn transform(code: String) -> Result<String, anyhow::Error> {
             }),
             IsModule::Bool(false),
             Some(compiler.comments()),
-        );			
+        );
 
         match program {
             Ok(mut program) => {
                 program.visit_mut_with(&mut javascript());
                 program.visit_mut_with(&mut strip_type());
 
-				match compiler.print(&program, PrintArgs::default()) {
-					Ok(s) => Ok(s.code),
-					Err(e) => Err(e),
-				}
+                match compiler.print(&program, PrintArgs::default()) {
+                    Ok(s) => Ok(s.code),
+                    Err(e) => Err(e),
+                }
             }
             Err(e) => Err(e),
         }
@@ -142,34 +142,34 @@ pub fn transform(code: String) -> Result<String, anyhow::Error> {
 }
 
 pub fn get_variables(code: String) -> Result<Vec<(String, Vec<String>)>, ()> {
-	let parsed = parse(code);
+    let parsed = parse(code);
 
-	if let Ok(parsed) = parsed {
-		let mut vars: Vec<(String, Vec<String>)> = vec![];
+    if let Ok(parsed) = parsed {
+        let mut vars: Vec<(String, Vec<String>)> = vec![];
 
-		for stmt in parsed.body.iter() {
-			if let ModuleItem::Stmt(Stmt::Decl(Decl::TsInterface(interface))) = stmt {
-				for member in interface.body.body.iter() {
-					if let TsTypeElement::TsPropertySignature(prop) = member {
-						let name = match *prop.key.clone() {
-							Expr::Ident(ident) => ident.sym.to_string(),
-							Expr::Lit(Lit::Str(str)) => str.value.to_string(),
-							_ => continue,
-						};
+        for stmt in parsed.body.iter() {
+            if let ModuleItem::Stmt(Stmt::Decl(Decl::TsInterface(interface))) = stmt {
+                for member in interface.body.body.iter() {
+                    if let TsTypeElement::TsPropertySignature(prop) = member {
+                        let name = match *prop.key.clone() {
+                            Expr::Ident(ident) => ident.sym.to_string(),
+                            Expr::Lit(Lit::Str(str)) => str.value.to_string(),
+                            _ => continue,
+                        };
 
-						let type_arr = match prop.type_ann.clone() {
-							Some(type_ann) => get_type(&type_ann.type_ann),
-							None => vec!["any".to_string()],
-						};
+                        let type_arr = match prop.type_ann.clone() {
+                            Some(type_ann) => get_type(&type_ann.type_ann),
+                            None => vec!["any".to_string()],
+                        };
 
-						vars.push((name, type_arr));
-					}
-				}
-			}
-		}
+                        vars.push((name, type_arr));
+                    }
+                }
+            }
+        }
 
-		return Ok(vars);
-	}
+        return Ok(vars);
+    }
 
-	return Err(());
+    return Err(());
 }
