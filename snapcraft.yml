@@ -1,0 +1,65 @@
+name: scrap
+base: core22
+version: '1.0.0'
+summary: Scrap is a block-based and text-based programming in one.
+description: |
+  Scratch is an excellent platform for beginners to get started with programming, thanks to its visual drag-and-drop interface. However, transitioning from Scratch to text-based languages like JavaScript can be intimidating. Scrap aims to ease this transition by providing a set of tools, resources, and utilities that help Scratch users grasp the concepts of JavaScript more easily.
+  
+  Features:
+    — No VM or Interpreter: Scrap is a pure JavaScript application that runs in your web browser. Unlike Scratch, it doesn't require any VM or interpreter to run your code. The engine is powered by BlockLike.js, a JavaScript library that allows you to write Scratch-like code in JavaScript.
+    — Block-based programming: Scrap's interface is block-based, just like Scratch. This makes it easier for Scratch users to get started with Scrap. The block-based interface is powered by Blockly.
+    — Text-based programming: Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by Monaco Editor (the same editor that powers Visual Studio Code).
+    — SB3 support: Scrap supports the SB3 file format, which is the default file format used by Scratch 3.0. This allows you to import your Scratch projects into Scrap and continue working on them.
+    — Cross-platform: As Scrap is built with Tauri, it can be compiled to run on Windows, macOS, Linux, Android and iOS. This means you can use Scrap on any platform you like.
+
+grade: stable
+confinement: strict
+
+layout:
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/webkit2gtk-4.1
+
+apps:
+  scrap:
+    command: usr/bin/scrap
+    desktop: usr/share/applications/scrap.desktop
+    extensions: [gnome]
+
+icon: ./src/icon.svg
+license: MIT
+source-code: https://github.com/tomaswrobel/scrap-native
+
+package-repositories:
+  - type: apt
+    components: [main]
+    suites: [noble]
+    key-id: 78E1918602959B9C59103100F1831DDAFC42E99D
+    url: http://ppa.launchpad.net/snappy-dev/snapcraft-daily/ubuntu
+
+parts:
+  build-app:
+    plugin: dump
+    build-snaps:
+      - node/20/stable
+      - rustup/latest/stable
+    build-packages:
+      - libwebkit2gtk-4.1-dev
+      - build-essential
+      - curl
+      - wget
+      - file
+      - libxdo-dev
+      - libssl-dev
+      - libayatana-appindicator3-dev
+      - librsvg2-dev
+      - dpkg
+    stage-packages:
+      - libwebkit2gtk-4.1-0
+      - libayatana-appindicator3-1
+    source: .
+    override-build: |
+      set -eu
+      npm install
+      npm run tauri build -- --bundles deb
+      dpkg -x src-tauri/target/release/bundle/deb/*.deb $SNAPCRAFT_PART_INSTALL/
+      sed -i -e "s|Icon=scrap|Icon=/usr/share/icons/hicolor/32x32/apps/scrap.png|g" $SNAPCRAFT_PART_INSTALL/usr/share/applications/scrap.desktop
