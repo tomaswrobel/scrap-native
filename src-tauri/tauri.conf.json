@@ -33,6 +33,13 @@
 			"icons/32x32.png",
 			"icons/128x128.png",
 			"icons/128x128@2x.png"
-		]
+		],
+		"category": "DeveloperTool",
+		"license": "MIT",
+		"publisher": "Tomáš Wróbel",
+		"licenseFile": "LICENSE",
+		"shortDescription": "Scrap is a tool for those, who want advance from block-based programming to text-based programming.",
+		"longDescription": "Scratch is an excellent platform for beginners to get started with programming, thanks to its visual drag-and-drop interface. However, transitioning from Scratch to text-based languages like JavaScript can be intimidating. Scrap aims to ease this transition by providing a set of tools, resources, and utilities that help Scratch users grasp the concepts of JavaScript more easily. \n\nFeatures:\n — No VM or Interpreter: Scrap is a pure JavaScript application that runs in your web browser. Unlike Scratch, it doesn't require any VM or interpreter to run your code. The engine is powered by BlockLike.js, a JavaScript library that allows you to write Scratch-like code in JavaScript. \n — Block-based programming: Scrap's interface is block-based, just like Scratch. This makes it easier for Scratch users to get started with Scrap. The block-based interface is powered by Blockly.\n - Text-based programming: Scrap features a text-based code editor that allows you to write JavaScript code. The code editor is powered by Monaco Editor (the same editor that powers Visual Studio Code).\n — SB3 support: Scrap supports the SB3 file format, which is the default file format used by Scratch 3.0. This allows you to import your Scratch projects into Scrap and continue working on them.\nCross-platform: As Scrap is built with Tauri, it can be compiled to run on Windows, macOS, Linux, Android and iOS. This means you can use Scrap on any platform you like.",
+		"homepage": "https://scrap.tomaswrobel.dev"
 	}
 }
