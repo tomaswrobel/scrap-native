@@ -1,0 +1,21 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+
+@use "sass:color";
+
+$gap: 5px;
+$primary: #2fbf71;
+$background: color.adjust($primary, $lightness: 40%);
+
+@mixin region($area) {
+	grid-area: $area;
+	border-radius: 5px;
+	background-color: white;
+}

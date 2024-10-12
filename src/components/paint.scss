@@ -1,0 +1,139 @@
+/**
+ * This file is a part of Scrap, an educational programming language.
+ * You should have received a copy of the MIT License, if not, please 
+ * visit https://opensource.org/licenses/MIT. To verify the code, visit
+ * the official repository at https://github.com/tomas-wrobel/scrap. 
+ * 
+ * @license MIT
+ * @author Tomáš Wróbel
+ */
+@use "../scss/globals" as *;
+@use "slider";
+
+.paint {
+	display: grid;
+
+	grid-template-areas:
+		"costume color controls"
+		"costume tools canvas";
+	gap: 20px 10px;
+
+	grid-template-columns: auto 40px 1fr;
+	grid-template-rows: 40px 1fr;
+
+	button {
+		all: unset;
+		padding: 6px;
+		font-size: 16px;
+		border-radius: 5px;
+		display: flex;
+		cursor: pointer;
+		justify-content: center;
+		align-items: center;
+		aspect-ratio: 1;
+		color: #575e75;
+
+		&.selected {
+			background-color: $primary;
+			color: white;
+
+			svg,
+			img {
+				filter: brightness(0) invert(100%);
+			}
+		}
+
+		&.shape-button > svg > * {
+			transform: scale(0.9);
+			transform-origin: center;
+		}
+
+		&.shape-button.outline {
+			&:not(.selected) ~ span,
+			&:not(.selected) ~ input[type="range"] {
+				display: none;
+			}
+
+			> svg {
+				stroke-width: 3px;
+				stroke: #575e75;
+				fill: none;
+			}
+		}
+
+		&.shape-button.fill > svg {
+			fill: #575e75;
+		}
+	}
+
+	span {
+		font-size: 14px;
+	}
+}
+
+.tools,
+.controls {
+	display: flex;
+	gap: 10px;
+	font-size: 18px;
+}
+
+.tools {
+	flex-direction: column;
+	grid-area: tools;
+}
+
+.controls {
+	grid-area: controls;
+	align-items: center;
+	padding-top: 20px;
+	padding-right: 20px;
+}
+
+.unit::after {
+	content: "px";
+}
+
+div.canvas {
+	grid-area: canvas;
+	display: grid;
+	align-content: center;
+	justify-content: center;
+	background: #d3d3d3;
+	position: relative;
+	overflow: auto;
+
+	> canvas:first-child {
+		background-image: url(./assets/checkboard.svg);
+	}
+
+	> canvas {
+		grid-area: 1 / 1;
+	}
+}
+
+.color {
+	grid-area: color;
+	margin: 10px 0;
+	height: 100%;
+	width: 100%;
+	background: transparent;
+	border-radius: 6px;
+
+	transform: scale(0.9);
+	transform-origin: center;
+}
+
+div.color {
+	box-sizing: border-box;
+	border: 3px solid rgba(0, 0, 0, 0.1);
+	pointer-events: none;
+}
+
+input.color {
+	opacity: 0;
+
+	&:focus + div.color {
+		outline: 3px solid rgba($color: $primary, $alpha: 0.75);
+	}
+}
